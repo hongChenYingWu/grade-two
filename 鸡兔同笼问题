@@ -18,7 +18,7 @@ void turtleAndRabbit(int a) {
 			}
 		}
 	}
-	else return;
+	else {minNum=0;maxNum=0;return;}
 }
 int main(){
 	int n;
