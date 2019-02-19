@@ -1,0 +1,37 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+char chess[10];
+int chessWang(int x, int y) {
+	int n;
+	n = x < y ? x : y;//斜着走取x和y中最小值为步数
+	n = n + abs(x - y);//横着走或者竖着走的步数
+	return n;
+}
+int chessHou(int x, int y) {  //后与车走的步数只有一步或两步两种情况
+	if (x == 0 || y == 0 || x == y) return 1;
+	else return 0;
+}
+int chessChe(int x, int y) {
+	if (x == 0 || y == 0)  return 1;
+	else return 2;
+}
+void chessXiang(int x, int y) {  //象走的步数有三种情况，一种是x和y之和为奇数，另两种是x和y之和为偶数
+	if ((x + y) % 2 != 0)  strcpy_s(chess,"Inf");
+	else if (x == y)  strcpy_s(chess,"1");
+	else  strcpy_s(chess,"2");
+}
+int main() {
+	int ncases;
+	scanf_s("%d\n", &ncases);//如果不加换行get_s会默认回车为结束
+	while (ncases--) {
+		char location[6];//输入数据较多时可以以字符串输入
+		gets_s(location);
+		int x =abs( location[3] - location[0]);
+		int y =abs( location[4] - location[1]);
+		chessXiang(x, y);
+		printf_s("%d %d %d %s\n", chessWang(x,y), chessHou(x,y), chessChe(x,y),chess);
+	}
+	system("pause"); 
+	return 0;
+}
