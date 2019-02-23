@@ -29,8 +29,9 @@ int main() {
 		gets_s(location);
 		int x =abs( location[3] - location[0]);
 		int y =abs( location[4] - location[1]);
-		chessXiang(x, y);
-		printf_s("%d %d %d %s\n", chessWang(x,y), chessHou(x,y), chessChe(x,y),chess);
+		if(x==0&&y==0) printf_s("0 0 0 0\n");//将初始位置和结束位置一样考虑进去，容易忽略
+		else{chessXiang(x, y);
+		printf_s("%d %d %d %s\n", chessWang(x,y), chessHou(x,y), chessChe(x,y),chess);}
 	}
 	system("pause"); 
 	return 0;
