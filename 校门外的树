@@ -1,0 +1,20 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+int main() {
+	int length,numSub,numTree=0 ;
+	scanf_s("%d %d", &length, &numSub);
+	int tree[10001];
+	for (int i = 0; i <= length; i++) tree[i] = 1;  //将路的长度+1个数组中元素都赋值为1
+	while (numSub--) {
+		int begin, end;
+		scanf_s("%d %d", &begin, &end);      
+		for (int i = begin; i <= end; i++)
+			tree[i] = 0;
+	}
+	for (int i = 0; i <= length; i++)
+		if (tree[i] == 1) numTree++;
+	printf_s("%d\n", numTree);//输入多组数据才有一组输出输出在循环外
+	system("pause"); 
+	return 0;
+}
