@@ -1,0 +1,44 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#include<string.h>
+char key[26] = { };
+void generateKey() {
+	srand(time(NULL));//每个时间都不相同
+		for (int i = 0; i < 26; i++) {
+			key[i] = rand() % 26 + 'A';
+			for (int j = 0; j < i; j++) {
+				if (key[i] == key[j]) i--;  //保证生成的字母不一样
+			}
+		}                             //大小字母用大写字母代换，小写字母用小写字母代换
+		for (int i = 26; i < 52; i++) {
+			key[i] = rand() % 26 + 'a';
+			for (int j = 26; j < i; j++) {
+				if (key[i] == key[j])  i--;
+			}
+	}
+	printf_s("生成的密钥为：");
+		for (int i = 0; i < 52; i++)  printf_s("%c", key[i]); printf_s("\n");
+		printf_s("请注意不要把该密钥告诉其他人或被其他人看见！\n");
+}
+void encrypt() {
+	char a[2000];
+	FILE *fpread = fopen("C:\\Users\\zhucheng\\Desktop\\明文.txt", "r");
+	fgets(a, 2000, fpread);
+	for (int i = 0; i < 2000; i++) {
+		if (a[i]>'A'&&a[i]<'Z')  a[i] = key[a[i] - 'A'];
+		else if(a[i] > 'a'&&a[i] < 'z')  a[i] = key[a[i] - 'a'+26];//小写字母与大写字母的加密要分开讨论
+	}
+	FILE *fpwrite = fopen("C:\\Users\\zhucheng\\Desktop\\密文.txt", "w");
+	fputs(a,fpwrite);
+	fclose(fpread);
+	fclose(fpwrite);
+	printf_s("\n\n");
+	printf("已加密成功，密文将保存在相应的文件中。\n");
+}
+int main() {
+	generateKey();
+	encrypt();
+	system("pause");
+	return 0;
+}
