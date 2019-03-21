@@ -2,8 +2,8 @@
 #include<stdlib.h>
 #include<time.h>
 #include<string.h>
-char key[26] = { };
-void generateKey() {
+char key [26] = {' '};
+void generateKey（）{
 	srand(time(NULL));//每个时间都不相同
 		for (int i = 0; i < 26; i++) {
 			key[i] = rand() % 26 + 'A';
