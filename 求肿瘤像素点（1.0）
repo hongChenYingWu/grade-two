@@ -1,0 +1,39 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define PIC_LEN 10  //表示要检测的图片的边长
+int pic[PIC_LEN][PIC_LEN] = {};
+void readPic(); //从指定的文件中读取图片
+void toTum_are();//计算图片中肿瘤所占的像素点
+int main() {
+	readPic();
+	toTum_are();
+	system("pause");
+	return 0;
+}
+void readPic() {
+	FILE *fp = fopen("C:\\Users\\zhucheng\\source\\repos\\Project57\\Project57\\肿瘤像素图.txt", "r+");
+	for (int i = 0; i < PIC_LEN; i++) {
+		for (int j = 0; j < PIC_LEN; j++) {
+			fscanf(fp, "%d", &pic[i][j]);  //将文件中的数字读入数组中
+			printf("%-3d", pic[i][j]);
+		}
+		printf("\n");
+	}
+}
+void toTum_are() {
+	int num = 0, flag = 0;
+	int tum_are=0;
+		for (int i = 0; i < PIC_LEN; i++) {
+			for (int j = 0; j < PIC_LEN; j++) {
+				if (pic[i][j] == 0&&flag==0) {
+					flag = 1; num = 0; 
+				}
+				else if(pic[i][j] == 255 && flag == 1) num++;
+				else if(pic[i][j] == 0&&flag==1) {//设置flag变量来区别奇数0和偶数0
+					tum_are += num; num = 0; flag = 0;//有偶数个数字0都要初始化
+				}
+			}
+			num = 0; flag = 0;//每一行过后都要初始化
+		}
+		printf("%d", tum_are);
+}
