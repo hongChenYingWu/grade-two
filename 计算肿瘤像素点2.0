@@ -1,0 +1,37 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define PIC_LEN 10  //表示要检测的图片的边长
+int pic[PIC_LEN][PIC_LEN] = {};
+void readPic(); //从指定的文件中读取图片
+void toTum_are();//计算图片中肿瘤所占的像素点
+int main() {
+	readPic();
+	toTum_are();
+	system("pause");
+	return 0;
+}
+void readPic() {
+	FILE *fp = fopen("C:\\Users\\zhucheng\\source\\repos\\Project57\\Project57\\肿瘤像素图.txt", "r+");
+	for (int i = 0; i < PIC_LEN; i++) {
+		for (int j = 0; j < PIC_LEN; j++) {
+			fscanf(fp, "%d", &pic[i][j]);
+			printf("%-4d", pic[i][j]);//以最长的数字长度为格式输出
+		}
+		printf("\n");
+	}
+}
+void toTum_are() {
+	int x1 = 0, y1 = 0, x2 = 0, y2 = 0;//用来表示肿瘤图像对角线两个点的坐标
+	for (int i = 0; i < PIC_LEN; i++) {
+		for (int j = 0; j < PIC_LEN; j++) {//通过判定找到这两个点
+			if (pic[i][j] == 0 && pic[i + 1][j] == 0 && pic[i][j + 1] == 0)
+			{
+				x1 = i; y1 = j;
+			}
+			if (pic[i][j] == 0 && pic[i - 1][j] == 0 && pic[i][j - 1] == 0) {
+				x2 = i; y2 = j;
+			}
+		}
+	}
+	printf("%d", (x2 - x1 - 1)*(y2 - y1 - 1));
+}
