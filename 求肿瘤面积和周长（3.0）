@@ -1,0 +1,47 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define PIC_LEN 10  //表示要检测的图片的边长
+int pic[PIC_LEN][PIC_LEN] = {};
+void readPic(); //从指定的文件中读取图片
+void toTum_are();//计算图片中肿瘤所占的像素点
+void toTum_c();//计算图片中肿瘤周长的像素点
+int main() {
+	readPic();
+	toTum_are();
+	toTum_c();
+	system("pause");
+	return 0;
+}
+void readPic() {
+	FILE *fp = fopen("C:\\Users\\zhucheng\\source\\repos\\Project57\\Project57\\肿瘤像素图.txt", "r+");
+	printf("要检测的图像为：\n");
+	for (int i = 0; i < PIC_LEN; i++) {
+		for (int j = 0; j < PIC_LEN; j++) {
+			fscanf(fp, "%d", &pic[i][j]);  //将文件中的数字读入数组中
+			printf("%-4d", pic[i][j]);
+		}
+		printf("\n");
+	}
+}
+void toTum_are() {
+	int tum_are=0;
+		for (int i = 0; i < PIC_LEN; i++) {
+			for (int j = 0; j < PIC_LEN; j++) {
+				if (pic[i][j] == 0)  tum_are++;
+			}
+		}
+		printf("该图像中肿瘤面积为:%d\n", tum_are);
+}
+void toTum_c() {
+	int tum_c=0;
+	for (int i = 0; i < PIC_LEN; i++) {
+		for (int j = 0; j < PIC_LEN; j++) {
+		if (pic[i][j] == 0 && (pic[i - 1][j] == 255 ||
+		pic[i + 1][j] == 255 || pic[i][j - 1] == 255 || pic[i][j + 1]==255))  
+				tum_c++;
+	//当一个点在肿瘤上，且它的上下左右的点至少有一个不在肿瘤上，
+	//我们认为这个点在肿瘤的边界上。
+		}
+	}
+	printf("该图像中肿瘤周长为:%d", tum_c);
+}
