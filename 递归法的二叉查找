@@ -1,0 +1,28 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define MAXLINE 10
+int twoSearch(int a[], int begin, int end, int object);
+//返回要查找的数在数组中的位置，查不到则返回-1
+int main() {
+	int a[100];
+	int object;
+	printf_s("请输入要查找的数:\n");
+	scanf_s("%d", &object);
+	printf("请输入长度为%d数组:\n", MAXLINE);
+	//输入的数组要按从小到大顺序
+	for (int i = 0; i < MAXLINE; i++) scanf_s("%d", &a[i]);
+	printf("所要查找的数在数组中的下标为:\n%d\n", twoSearch(a, 0, MAXLINE - 1, object));
+	system("pause");
+	return 0;
+}
+int twoSearch(int a[], int begin, int end, int object) { 
+	//不可以直接用MAXLINE作参数
+	int middle = (begin + end) / 2;
+	if (a[middle] == object) return middle;
+	if (begin == end)  return -1;
+	//当begin位置与end位置重合时结束,但结束前还是要判定下
+	else if (a[middle] < object)
+		return twoSearch(a, middle + 1, end, object);
+	else if (a[middle] > object)
+		return twoSearch(a, begin, middle - 1, object);
+}
