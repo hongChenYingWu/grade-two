@@ -1,0 +1,64 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct STU{
+	char id[20];
+	float finGrade;//期末成绩
+	int nPaper;//发表论文数量
+	float evaGrade;//班级评议成绩
+	int isWestArea;//是否为西部省份
+	int isManager;//是否是学生干部
+};
+#define NSTU 100
+int sch[NSTU] = {};//利用该数组对各个同学奖学金数量进行排序
+void toSchship(STU stu,int i);//求每个人应得奖学金数量
+void toHighSchId();//求奖学金最高的同学的学号
+int main() {
+	toHighSchId();
+	system("pause");
+	return 0;
+}
+void toHighSchId() {
+	STU stu[NSTU];
+	int schship[NSTU];
+	for (int i = 0; i < NSTU; i++) {
+		printf("请输入第%d位同学的信息\n",i+1);
+		printf("学号：\n");
+		scanf_s("%s", stu[i].id, sizeof(stu[i].id));
+		printf("期末考试成绩：\n");
+		scanf("%f", &stu[i].finGrade);
+		printf("发表论文的数量：\n");
+		scanf("%d", &stu[i].nPaper);
+		printf("班级评议成绩：\n");
+		scanf("%f", &stu[i].evaGrade);
+		printf("是否为西部省份生源：\n");
+		scanf("%d", &stu[i].isWestArea);
+		printf("是否为学生干部：\n");
+		scanf("%d", &stu[i].isManager);
+		toSchship(stu[i],i);
+	}
+	int toHighSch = sch[0];
+	for (int i = 1; i < NSTU; i++) {
+		if (sch[i] > toHighSch) toHighSch = sch[i];
+		//求最多奖学金是多少
+	}
+	printf("获得奖学金最多的学生学号为：\n");
+	for (int i = 0; i < NSTU; i++) {
+		if (sch[i] == toHighSch)
+			printf("%s\n", stu[i].id);
+	}
+}
+void toSchship(STU stu,int i) {
+	int schship = 0;
+	if (stu.finGrade > 80 && stu.nPaper)  schship += 8000;
+	//院士奖学金
+	if (stu.finGrade > 85 && stu.evaGrade > 80)  schship += 4000;
+	//五四奖学金
+	if (stu.finGrade > 90) schship += 2000;
+	//成绩优秀奖
+	if (stu.finGrade > 85 && stu.isWestArea) schship += 1000;
+	//西部奖学金
+	if (stu.finGrade > 80 && stu.isManager)  schship += 850;
+	//班级贡献奖
+	sch[i] = schship;
+	printf("该同学奖学金为：%d\n", schship);
+}
