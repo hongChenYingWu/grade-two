@@ -1,0 +1,52 @@
+#include<stdio.h>
+#include<stdlib.h>
+int num=0;//用来记录不同排序方式的个数
+void perm(char a[], int begin,int end);
+void swap(char a[], int begin, int i);
+int judge(char a[], int begin, int i);
+//将重复的排序方式排除掉
+int main() {
+	int n;
+	printf("请输入元素个数:\n");
+	scanf_s("%d", &n);
+	printf("请输入要排序的元素：\n");
+	char a[1000];
+	scanf_s("\n");
+	gets_s(a);
+	printf("输出的不同排序为：\n");
+	perm(a, 0, n-1);
+	printf("不同排序方式共有%d种\n", num);
+	system("pause");
+	return 0;
+}
+void perm(char a[], int begin, int end) {
+	if (begin == end) {
+		num++;
+		for (int i = 0; i <=end; i++)
+			printf("%c", a[i]);
+		printf("\n");
+		return;
+	}
+	for (int i = begin; i <= end; i++) {
+		if (judge(a, begin, i)) {
+			swap(a,begin,i);
+			perm(a, begin + 1, end);
+			swap(a,begin,i);
+			//交换位置后还要记得换回来
+		}
+	}
+}
+int judge(char a[], int begin, int i) {
+	if (i > begin) {
+		for (int j = begin; j < i; j++)
+			if (a[j] == a[i]) return 0;
+	}
+	return 1;
+	//当i=begin时，return 1
+	//或者当上述循环跳出时，即i与前面的元素都不相同时，return 1
+}
+void swap(char a[], int begin,int i) {
+	char t = a[begin];
+	a[begin] = a[i];
+	a[i] = t;
+}
