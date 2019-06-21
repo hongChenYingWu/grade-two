@@ -1,0 +1,71 @@
+#include<stdio.h>
+#include<stdlib.h>
+int maxValue = 0;
+int val[100][1000] = {};
+//构建了val二维数组，
+//val数组的值代表前i个物品装入容量j的背包的最大价值
+void knapsack(int,int,int[],int[]);
+int max(int, int);
+//变量过多直接写变量形式即可
+int main() {
+	int volume;
+	printf("请输入背包容量：\n");
+	scanf_s("%d", &volume);
+	int num;
+	printf("请输入物品数:\n");
+	scanf_s("%d", &num);
+	int weight[100];
+	printf("请输入各物品的重量：\n");
+	for (int i = 0; i < num; i++) 
+		scanf_s("%d", &weight[i]);
+	int value[100];
+	printf("请输入各物品的价值：\n");
+	for (int i = 0; i < num; i++)
+		scanf_s("%d", &value[i]);
+	knapsack(volume,num,weight,value);
+	system("pause");
+	return 0;
+}
+void knapsack(int volume,int num,int weight[],int value[]) {
+	for (int i = 0; i < num; i++)  val[i][0] = 0;
+	for (int j = 0; j < volume; j++)  val[0][j] = 0;
+	//初始化val数组
+	for (int i = 1; i <=num; i++) {
+		for (int j = 0; j <=volume; j++) {
+			if (j < weight[i - 1]) {
+				//weight[i-1]代表第i个物体的重量,此下标易混肴
+				//如果第i个物品的重量大于背包容量，
+				//则第i个物品不放入背包，val[i][j]=val[i-1][j]
+				val[i][j] = val[i - 1][j];
+				printf("val[%d][%d]=%2d", i, j, val[i][j]);
+			}
+			else {
+				val[i][j] =max(val[i - 1][j],
+					val[i - 1][j - weight[i - 1]] + value[i - 1]);
+				/*当第i个物品重量小于背包容量，有两种情况，
+				不放第i个物品，或者放入第i个物品，两种情况
+				皆有可能出现，用max函数取最大值，此算法的数学
+				基础为当放入第i个物品时val[i][j] =
+				[i - 1][j - weight[i - 1]] + value[i - 1]*/
+				printf("val[%d][%d]=%2d", i, j, val[i][j]);
+			}
+		}
+		printf("\n");
+	}
+	maxValue = val[num][volume];
+	printf("放入物品的最大价值为：\n");
+	printf("%d\n", maxValue);
+	int j = volume;
+	int items[100];
+	//用1和0代表是否放入物体
+	for (int i = 1; i <= num; i++)
+		if (val[i][j] > val[i - 1][j])
+			items[i] = 1;
+		else  items[i] = 0;
+	printf("放入的物品为：\n");
+	for (int i = 1; i <=num; i++) 
+		printf("%d ", items[i]);
+}
+int max(int a, int b) {
+	return (a >= b) ? a : b;
+}
