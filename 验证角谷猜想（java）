@@ -1,0 +1,16 @@
+package helloWorld;
+
+public class JiaoGu {
+public static void main(String[] args) {
+	int num=0;
+	for(int j=3;j<=1000;j++) {
+		int i=j;
+		while(i!=1) {
+		if(i%2==1) i=i*3+1;
+		else i=i/2;
+		}
+		num++;
+	}
+if(num==998)  System.out.println("3-1000的数符合角谷猜想");
+}
+}
