@@ -1,0 +1,72 @@
+//题目：在有障碍的地图中用bfs寻找到终点的最短路径
+#include<iostream>
+#include<queue>
+#include<cstring>
+#define MAXN 101
+using namespace std;
+struct Node {
+	int x, y;//x表示该位置行数，y表示该位置列数
+	int step;//表示走到该位置用的步数
+	int k;//用k的k位来表示当前k把钥匙的状态
+};
+int n, m, k, a, b, c, d;
+//n,m分别表示地图的行数和列数，k表示上锁的房间数目
+queue<Node> que;
+int fx[] = { 0,1,0,-1 };
+int fy[] = { 1,0,-1,0 };
+int map[MAXN][MAXN];
+int key[MAXN][MAXN];//用来存放钥匙的位置
+bool vis[MAXN][MAXN][40];//用来记录该位置当前状态是否访问过
+int bfs() {//宽度优先搜索算法，用队列依次存储每一步的所有可能
+	while (!que.empty())  que.pop();//清空上一个例子队列残余
+	vis[a][b][key[a][b]] = true;
+	Node first = { a,b,0,key[a][b] };
+	que.push(first); //先对队列进行初始化
+	while (!que.empty()) {
+		Node cur = que.front();
+		if (cur.x == c && cur.y == d) return cur.step;
+		//当队列中第一次出现终点坐标时，就跳出
+		que.pop();
+		for (int i = 0; i < 4; i++) {//将每一个方向都加以判断
+			int tx = cur.x + fx[i];
+			int ty = cur.y + fy[i];
+			if (tx < 0 || tx >= n || ty < 0 || ty >= m || vis[tx][ty][cur.k | key[tx][ty]])
+				continue;//当下一跳位置可以访问且已经访问过，则忽略
+			if (!map[tx][ty] || (map[tx][ty] > 0 && ((cur.k >> (map[tx][ty] - 1)) & 1)) ) {
+			//判断吓一跳位置时能否访问
+				Node next = { tx,ty,cur.step + 1,cur.k | key[tx][ty] };
+				//若能访问且该状态之前没有访问过，则将该结点添加到队列中
+				vis[tx][ty][next.k] = true;
+				que.push(next);
+			}
+		}
+	}
+	return -1;
+}
+int main() {
+	int T;
+	scanf_s("%d", &T);
+	while (T--) {
+		scanf_s("%d %d %d %d %d %d %d\n", &n, &m, &k, &a, &b, &c, &d);
+		memset(map, -1, sizeof(map));//容易忘记，初始化为0的全局变量可省略
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				char ch;
+				//scanf_s("%c",&ch,sizeof(ch));
+				cin >> ch;
+				if (ch == '.')  map[i][j] = 0;
+				else if (ch == '#') map[i][j] = -1;
+				else map[i][j] = (ch - 'A' + 1);
+				// 对map数组进行初始化
+			}
+		}
+		for (int i = 0; i < k; i++) {
+			int x, y;
+			scanf_s("%d %d", &x, &y);
+			key[x][y] = 1 << i;
+		}
+		printf("%d\n", bfs());
+		system("pause");
+	}
+	return 0;
+}
