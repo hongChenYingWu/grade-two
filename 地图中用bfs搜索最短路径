@@ -21,6 +21,29 @@ int bfs() {//宽度优先搜索算法，用队列依次存储每一步的所有�
 	while (!que.empty())  que.pop();//清空上一个例子队列残余
 	vis[a][b][key[a][b]] = true;
 	Node first = { a,b,0,key[a][b] };
+//题目：在有障碍的地图中用bfs寻找到终点的最短路径
+#include<iostream>
+#include<queue>
+#include<cstring>
+#define MAXN 101
+using namespace std;
+struct Node {
+	int x, y;//x表示该位置行数，y表示该位置列数
+	int step;//表示走到该位置用的步数
+	int k;//用k的k位来表示当前k把钥匙的状态
+};
+int n, m, k, a, b, c, d;
+//n,m分别表示地图的行数和列数，k表示上锁的房间数目
+queue<Node> que;
+int fx[] = { 0,1,0,-1 };
+int fy[] = { 1,0,-1,0 };
+int map[MAXN][MAXN];
+int key[MAXN][MAXN];//用来存放钥匙的位置
+bool vis[MAXN][MAXN][40];//用来记录该位置当前状态是否访问过
+int bfs() {//宽度优先搜索算法，用队列依次存储每一步的所有可能
+	while (!que.empty())  que.pop();//清空上一个例子队列残余
+	vis[a][b][key[a][b]] = true;
+	Node first = { a,b,0,key[a][b] };
 	que.push(first); //先对队列进行初始化
 	while (!que.empty()) {
 		Node cur = que.front();
@@ -45,10 +68,12 @@ int bfs() {//宽度优先搜索算法，用队列依次存储每一步的所有�
 }
 int main() {
 	int T;
-	scanf_s("%d", &T);
+	scanf("%d", &T);
 	while (T--) {
-		scanf_s("%d %d %d %d %d %d %d\n", &n, &m, &k, &a, &b, &c, &d);
-		memset(map, -1, sizeof(map));//容易忘记，初始化为0的全局变量可省略
+		scanf("%d %d %d %d %d %d %d\n", &n, &m, &k, &a, &b, &c, &d);
+		memset(map, -1, sizeof(map));
+		memset(vis, 0, sizeof(vis));
+		memset(key, 0, sizeof(key));//全局变量，多组输入的初始化
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
 				char ch;
@@ -62,7 +87,7 @@ int main() {
 		}
 		for (int i = 0; i < k; i++) {
 			int x, y;
-			scanf_s("%d %d", &x, &y);
+			scanf("%d %d", &x, &y);
 			key[x][y] = 1 << i;
 		}
 		printf("%d\n", bfs());
